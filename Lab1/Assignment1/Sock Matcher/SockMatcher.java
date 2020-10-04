@@ -12,6 +12,7 @@ public class SockMatcher
     private ShelfManager shelfManager;          /* variable to access output of shelf manager */
     private List<RobotArm> robotArms;           /* list contains object of RoboArm class (which corresponds to each robotic arm) */
     private Random rand;                        /* random number generator, each arm will pick random sock */
+    private int curr_socks;                     /* number of socks picked up until now */
 
     /* function starts all the robotic arms concurrently and returns
     when no sock is left to be picked. Finally outputs the pairs formed */
@@ -64,6 +65,7 @@ public class SockMatcher
     {
         num_robots = numOfRobots;
         socks = Socks;
+        curr_socks = 0;
 
         shelfManager = new ShelfManager();
         matchingMachine = new MatchingMachine(shelfManager);
@@ -83,34 +85,18 @@ public class SockMatcher
         int rand_int;
         boolean flag = false;
 
-        /* this block needs to be in synchronization because socks size may be changed by different
-        thread, resulting in some unreasonable random sock ID */
-        synchronized (this)
-        {
-            if(socks.size() > 0)
-            {   
-                rand_int = rand.nextInt(socks.size());
-                flag = locks.get(rand_int).tryAcquire();            /* checks if a sock can be acquired or not */
-            }
-            else
-                return -1;
-        }
-        // flag = locks.get(rand_int).tryAcquire();
+        if(this.curr_socks == socks.size())                 /* if we have picked all the socks, return -1 */
+            return -1;
 
-        /* after acquiring the sock, remove it from the socks list */
-        if(flag && rand_int<socks.size())
+        rand_int = rand.nextInt(socks.size());
+        flag = locks.get(rand_int).tryAcquire();            /* checks if a sock can be acquired or not */
+
+        /* after acquiring the sock, return this sock and update the count of picked socks */
+        if(flag)
         {   
             int sockID = socks.get(rand_int);
-            socks.remove(rand_int);
-            locks.remove(rand_int);
+            this.curr_socks++;
             return sockID;
-            // int sockID;
-            // synchronized (socks)
-            // {
-            //     sockID = socks.get(rand_int);
-            //     socks.remove(rand_int);
-            // }
-            // return sockID;
         }
         else
             return this.getSock();
