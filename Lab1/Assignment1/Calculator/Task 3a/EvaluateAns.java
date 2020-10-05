@@ -2,8 +2,6 @@ import java.util.Stack;
 
 public class EvaluateAns
 {
-    Calculator calc = new Calculator();
-
     /* Returns true if 'op2' has higher or same precedence as 'op1',
        otherwise returns false. */
     public static boolean checkPrecedence(char op1, char op2)
@@ -26,7 +24,7 @@ public class EvaluateAns
             case '*':
                 return a*b;
             case '/':
-                if (b==0)
+                if (b == 0)
                 {
                     throw new
                             UnsupportedOperationException("Cannot divide by zero");
@@ -38,7 +36,7 @@ public class EvaluateAns
 
     public static void evaluate()
     {
-        String query = calc.displayArea.getText();          /* getting the query string that needs to be evaluated */
+        String query = Calculator.displayArea.getText();          /* getting the query string that needs to be evaluated */
         Stack<Integer> keys = new Stack<>();                /* stack contains integers */
         Stack<Character> operators = new Stack<>();         /* stack contains operators */
 
@@ -74,7 +72,7 @@ public class EvaluateAns
             keys.push(operation(operators.pop(), keys.pop(), keys.pop()));
 
         int res = keys.pop();
-        calc.displayArea.setText(Integer.toString(res));
+        Calculator.displayArea.setText(Integer.toString(res));
     }
 
     public static void readInput(String input){
@@ -84,7 +82,7 @@ public class EvaluateAns
         }
         if(input.equals("C"))
         {
-            calc.displayArea.setText("");
+            Calculator.displayArea.setText("");
         }
     }
     
