@@ -1,0 +1,5 @@
+170101049,Priyanshu Singh,priyanshu@gmail.com,93,CC
+170101005,Aman Mishra,aman@gmail.com,85,TA1
+170101012,Arpit Gupta,arpgu@gmail.com,86,CC
+170101013,Aryan Agrawal,aryan@gmail.com,85,CC
+170101031,Keerti Harpavat,keerti@gmail.com,92,TA2
