@@ -1,0 +1,9 @@
+1. "input.txt" contains the input of the program. It contains two lines, first is the number of robotic arms and second lines contain space separated integers which denote color of socks (1->White, 2->Black, 3->Blue, 4->Grey)
+
+2. Run the following commands:
+
+javac SockMatcher.java
+java SockMatcher
+
+3. Since the process of picking socks is random, on some execution of code, it may happen that majority of the socks is picked by only one or two robotic arms. "Output.png" contains an execution sequence which has the socks distributed evenly across Robotic arms.
+
