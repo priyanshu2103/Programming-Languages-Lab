@@ -26,6 +26,7 @@ public class MatchingMachine
             if(white_sock)
             {
                 shelfManager.putOnShelf(sockID);
+                white_sock = false;
             }
             else
                 white_sock = true;
@@ -35,6 +36,7 @@ public class MatchingMachine
             if(black_sock)
             {
                 shelfManager.putOnShelf(sockID);
+                black_sock = false;
             }
             else
                 black_sock = true;
@@ -44,6 +46,7 @@ public class MatchingMachine
             if(blue_sock)
             {
                 shelfManager.putOnShelf(sockID);
+                blue_sock = false;
             }
             else
                 blue_sock = true;
@@ -53,6 +56,7 @@ public class MatchingMachine
             if(grey_sock)
             {
                 shelfManager.putOnShelf(sockID);
+                grey_sock = false;
             }
             else
                 grey_sock = true;

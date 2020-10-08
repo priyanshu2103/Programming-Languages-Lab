@@ -82,24 +82,21 @@ public class SockMatcher
     recursively. */
     public int getSock()
     {
-        int rand_int;
-        boolean flag = false;
+        while(true)
+        {
+            if(this.curr_socks == socks.size())                 /* if we have picked all the socks, return -1 */
+                return -1;
+            int rand_int = rand.nextInt(socks.size());
+            boolean flag = locks.get(rand_int).tryAcquire();    /* checks if a sock can be acquired or not */
 
-        if(this.curr_socks == socks.size())                 /* if we have picked all the socks, return -1 */
-            return -1;
-
-        rand_int = rand.nextInt(socks.size());
-        flag = locks.get(rand_int).tryAcquire();            /* checks if a sock can be acquired or not */
-
-        /* after acquiring the sock, return this sock and update the count of picked socks */
-        if(flag)
-        {   
-            int sockID = socks.get(rand_int);
-            this.curr_socks++;
-            return sockID;
+            /* after acquiring the sock, return this sock and update the count of picked socks */
+            if(flag)
+            {
+                int sockID = socks.get(rand_int);
+                this.curr_socks++;
+                return sockID;
+            }
         }
-        else
-            return this.getSock();
     }
 
     /* Entry point of code */
