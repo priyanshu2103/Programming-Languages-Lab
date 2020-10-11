@@ -75,7 +75,8 @@ public class EvaluateAns
         Calculator.displayArea.setText(Integer.toString(res));
     }
 
-    public static void readInput(String input){
+    public static void readInput(String input)
+    {
         if(input.equals("="))
         {
             evaluate();
