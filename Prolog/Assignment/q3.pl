@@ -42,19 +42,19 @@ weight(g17, g18, 8).
 
 check_if_empty([]).										% checks if a list is empty
 
-print_path(_,[]).
+display_path(_,[]).
 
 % if we have only 2 nodes remaining, print them
-print_path(FirstVert, [SecondVert|Rest]):-
+display_path(FirstVert, [SecondVert|Rest]):-
 	check_if_empty(Rest),
 	write(FirstVert),
 	writeln(SecondVert).
 
 % recursive utility function which prints path
-print_path(FirstVert, [SecondVert|Rest]):-
+display_path(FirstVert, [SecondVert|Rest]):-
 	\+ check_if_empty(Rest),
 	format("~w~w -> ", [FirstVert, SecondVert]),
-	print_path("", Rest).
+	display_path("", Rest).
  
 % edge between 2 gates A and B exist if we have entry A->B or B->A in the knowledge base
 edge(Vertex, Vertex1, W) :- weight(Vertex, Vertex1, W).
@@ -93,7 +93,7 @@ check_path_validity(Path) :-
 
 % base case of recursion, prints the path
 build_path(g17, Visited) :- 
-	print_path("Path: ",Visited).
+	display_path("Path: ",Visited).
 
 % recursively builds a valid path from given a given gate and already visited gates
 build_path(Vertex, Visited) :- 
@@ -104,7 +104,7 @@ build_path(Vertex, Visited) :-
 	build_path(Vertex1, VisitedNew).
 
 % this predicate prints all the valid paths of every length
-all_possible_paths() :- 
+find_all_paths() :- 
 	writeln("The following paths are the valid for escaping:"),
 	start(Vertex),
 	build_path(Vertex, [Vertex]),
@@ -112,7 +112,7 @@ all_possible_paths() :-
 
 % base case of recursion, print the visited list
 build_path(g17, Visited, 0) :- 
-	print_path("Path: ",Visited).
+	display_path("Path: ",Visited).
 
 % recursively finding a path from vertex with a given length
 build_path(Vertex, Visited, Len) :- 
@@ -128,21 +128,21 @@ paths_with_length(Len) :-
 	start(Vertex),										% path should begin from either g1, g2, g3, g4
 	build_path(Vertex, [Vertex], Len).					% build a path starting from vertex and having given length
 
-best_path_calc(g17, _, 0).								% base case of recursion
+optimum_path_calc(g17, _, 0).							% base case of recursion
 
 % recursively calculate the best path from Vertex with a given length
-best_path_calc(Vertex, Visited, Len) :- 
+optimum_path_calc(Vertex, Visited, Len) :- 
 	Vertex \= g17, 										% g17 is the end gate
 	edge(Vertex, Vertex1, W),							% check if there is a gate connected from Vertex
 	\+member(Vertex1, Visited), 						% new gate should not be a visited one
 	append(Visited, [Vertex1], VisitedNew), 			% add this new gate to the visited list
-	best_path_calc(Vertex1, VisitedNew, Len1), 			% calculate the best path from this new gate
+	optimum_path_calc(Vertex1, VisitedNew, Len1), 		% calculate the best path from this new gate
 	Len is Len1 + W.									% length of the best path is length from new gate plus distance between gates
 
 % finds the best path of a given length
 best_path(Len) :- 
 	start(Vertex),										% path should begin from either g1, g2, g3, g4
-	best_path_calc(Vertex, [Vertex], Len).				% finds the best path of a given length beginning from Vertex
+	optimum_path_calc(Vertex, [Vertex], Len).			% finds the best path of a given length beginning from Vertex
 
 % prints the weight of path
 print_weight(MinDist):-
