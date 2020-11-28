@@ -142,19 +142,18 @@ design availableSpace numBedrooms numHalls = do
        set of functions to find all possible unique combinations of various dimensions.
        iteratively going through all the different types of rooms with the condition that the total area occupied
        by a particular orientation should be less than maximum area. unique_ function is used to remove duplicate areas
-       from the list, which speeds up the code and reduces search space. 
+       from the list, which speeds up the code and reduces search space. We didn't remove duplicates in bedroom and hall
+       because rest rooms have dependencies on them.
     --}
     -- for bedroom and hall
     let posBH = [(elem1, elem2) | (elem1, elem2) <- bedHall bedroomDims hallDims, getFirstFromTuple elem1 * getSecondFromTuple elem1 * numBedrooms + getFirstFromTuple elem2 * getSecondFromTuple elem2 * numHalls <= availableSpace]
-    let tempBH = uniqueBH posBH [] numBedrooms numHalls
     
     -- for bedroom, hall and kitchen
-    let posBHK = [(elem1, elem2, elem3) | (elem1, elem2, elem3) <- bedHallKitch tempBH kitchenDims, getFirstFromTuple elem1 * getSecondFromTuple elem1 * numBedrooms + getFirstFromTuple elem2 * getSecondFromTuple elem2 * numHalls + getFirstFromTuple elem3 * getSecondFromTuple elem3 * numKitchens <= availableSpace]
-    let tempBHK = uniqueBHK posBHK [] numBedrooms numHalls numKitchens
+    let posBHK = [(elem1, elem2, elem3) | (elem1, elem2, elem3) <- bedHallKitch posBH kitchenDims, getFirstFromTuple elem1 * getSecondFromTuple elem1 * numBedrooms + getFirstFromTuple elem2 * getSecondFromTuple elem2 * numHalls + getFirstFromTuple elem3 * getSecondFromTuple elem3 * numKitchens <= availableSpace]
 
     -- for bedroom, hall, kitchen and bathroom
-    let posBHKB = [(elem1, elem2, elem3, elem4) | (elem1, elem2, elem3, elem4) <- bedHallKitchBath tempBHK bathroomDims, getFirstFromTuple elem1 * getSecondFromTuple elem1 * numBedrooms + getFirstFromTuple elem2 * getSecondFromTuple elem2 * numHalls + getFirstFromTuple elem3 * getSecondFromTuple elem3 * numKitchens + getFirstFromTuple elem4 * getSecondFromTuple elem4 * numBathrooms <= availableSpace]
-    let tempBHKB = uniqueBHKB posBHKB []numBedrooms numHalls numKitchens numBathrooms  
+    let posBHKB = [(elem1, elem2, elem3, elem4) | (elem1, elem2, elem3, elem4) <- bedHallKitchBath posBHK bathroomDims, getFirstFromTuple elem1 * getSecondFromTuple elem1 * numBedrooms + getFirstFromTuple elem2 * getSecondFromTuple elem2 * numHalls + getFirstFromTuple elem3 * getSecondFromTuple elem3 * numKitchens + getFirstFromTuple elem4 * getSecondFromTuple elem4 * numBathrooms <= availableSpace]
+    let tempBHKB = uniqueBHKB posBHKB [] numBedrooms numHalls numKitchens numBathrooms  
 
     -- for bedroom, hall, kitchen, bathroom and garden
     let posBHKBG = [(elem1, elem2, elem3, elem4, elem5) | (elem1, elem2, elem3, elem4, elem5) <- bedHallKitchBathGar tempBHKB gardenDims, getFirstFromTuple elem1 * getSecondFromTuple elem1 * numBedrooms + getFirstFromTuple elem2 * getSecondFromTuple elem2 * numHalls + getFirstFromTuple elem3 * getSecondFromTuple elem3 * numKitchens + getFirstFromTuple elem4 * getSecondFromTuple elem4 * numBathrooms + getFirstFromTuple elem5 * getSecondFromTuple elem5 * numGarden <= availableSpace]
